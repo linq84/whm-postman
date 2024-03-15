@@ -1,0 +1,19 @@
+```javascript
+   // Obtain a new session token
+   const username = pm.environment.get("whm_username");
+   const password = pm.environment.get("whm_password");
+   const hostname = pm.environment.get("whm_hostname");
+
+   pm.sendRequest({
+       url: `${hostname}:2087/json-api/create_user_session?api.version=2&user=${username}&service=cpaneld&password=${password}`,
+       method: 'POST',
+       header: {
+           'Content-Type': 'application/json'
+       }
+   }, function (err, res) {
+       if (err) {
+           console.error(err);
+           return;
+       }
+       pm.environment.set("session_token", res.json().data.metadata.security_token);
+   });
